@@ -106,7 +106,7 @@ class MakeFullService extends Command
         class {$name}Controller extends Controller
         {
             use ApiResponseTrait;
-            
+
             {$methodsCode}
         }
         EOT;
@@ -150,13 +150,16 @@ class MakeFullService extends Command
     protected function createContract($name, $methods): void
     {
         $path = app_path("Services/Contracts/{$name}Contract.php");
-
+        $data = '$data';
         $methodCode = '';
+
         foreach($methods as $method)
         {
+            $dtoName = Str::studly($method) . $name . 'Dto';
+
             $methodCode .= <<<EOT
 
-                public function {$method}();
+                public function {$method}({$dtoName} {$data}): string;
 
             EOT;
 

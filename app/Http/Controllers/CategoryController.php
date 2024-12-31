@@ -10,6 +10,7 @@ use App\Http\Requests\Category\CreateCategoryRequest;
 use App\Http\Requests\Category\DeleteCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Requests\IdRequest;
+use App\Models\Category;
 use App\Services\Facades\CategoryFacade;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
@@ -27,17 +28,17 @@ class CategoryController extends Controller
      * @param CreateCategoryRequest $request
      * @return JsonResponse
      */
-    public function createCategory(CreateCategoryRequest $request): JsonResponse
-    {
-        $dto = CreateCategoryDto::create($request);
+        public function createCategory(CreateCategoryRequest $request): JsonResponse
+        {
+            $dto = CreateCategoryDto::create($request);
 
-        $category = CategoryFacade::create($dto);
+            $state = CategoryFacade::create($dto);
 
-        if(!$category)
-            return $this->error(__('responses.already_exist', ['resource' => $category->name]), 400);
+            if($state == 'already_exist')
+                return $this->error(__("responses.{$state}", ['resource' => $dto->name]), 400);
 
-        return $this->success(null, __('responses.created', ['resource' => $category->name]), 200);
-    }
+            return $this->success(__("responses.{$state}", ['resource' => $dto->name]), 200);
+        }
 
     /**
      * Update the category details.
@@ -49,12 +50,12 @@ class CategoryController extends Controller
     {
         $dto = UpdateCategoryDto::update($request);
 
-        $action = CategoryFacade::update($dto);
+        $category = CategoryFacade::update($dto);
 
-        if(!$action)
+        if(!$category)
             return $this->error();
 
-        return $this->success(null, __('responses.updated', ['resource' => $action]), 200);
+        return $this->success(__('responses.updated', ['resource' => $dto->name]), 200);
     }
 
     /**
@@ -67,12 +68,12 @@ class CategoryController extends Controller
     {
         $dto = DeleteCategoryDto::delete($request);
 
-        $action = CategoryFacade::delete($dto);
+        $category = CategoryFacade::delete($dto);
 
-        if(!$action)
+        if($category == null)
             return $this->error();
 
-        return $this->success(null, __('responses.deleted', ['resource' => $action]), 200);
+        return $this->success(__('responses.deleted', ['resource' => $dto->name]), 200);
     }
 
     /**
@@ -85,9 +86,9 @@ class CategoryController extends Controller
     {
         $dto = IdDto::id($request);
 
-        $category = CategoryFacade::show($dto);
+        $category = CategoryFacade::showContent($dto);
 
-        if(!$category)
+        if($category == null)
             return $this->error(__('responses.not_found'), 404);
 
         return $this->data($category);

@@ -17,14 +17,14 @@ trait ApiResponseTrait
     }
 
     /**
-     * Return Success Response.
+     * Return Response.
      *
      * @param string $message
      * @param int $statusCode
      * @param mixed|null $data
      * @return JsonResponse
      */
-    public function success(string $message = 'Success', int $statusCode = 200, mixed $data = null, ): JsonResponse
+    public function success(string $message = 'Success', int $statusCode = 200, mixed $data = null): JsonResponse
     {
         return response()->json([
             'status' => true,

@@ -10,11 +10,13 @@ return [
     'created'   => 'The :resource was created successfully!',
     'updated'   => 'The :resource was updated successfully!',
     'deleted'   => 'The :resource was deleted successfully!',
-    'already_exist' => 'The :resource is already exist.',
     'custom_error' => [
         ''
     ],
     'custom_success' => [
         'added' => 'The :resource was added to the :destination successfully!',
+    ],
+    'conflict' =>[
+        'already_exist' => 'The :resource is already exist.',
     ],
 ];
