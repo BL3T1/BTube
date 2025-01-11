@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\Collection;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteCategoryRequest extends FormRequest
+class AddToCollectionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,9 @@ class DeleteCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
+            'id' => 'required|string',
+            'video_ids' => 'required|array',
+            'video_ids.*' => 'exist:videos,id' // This line is to check if the IDs exist in the videos table.
         ];
     }
 }

@@ -6,7 +6,7 @@
 return [
     'success'   => 'Operation has been done successfully!',
     'error'     => 'Something went wrong, please try again.',
-    'not_found' => 'The requested resources was not found.',
+    'not_found' => 'The requested :resource was not found.',
     'created'   => 'The :resource was created successfully!',
     'updated'   => 'The :resource was updated successfully!',
     'deleted'   => 'The :resource was deleted successfully!',

@@ -22,50 +22,53 @@ class CommentsController extends Controller
     {
         $dto = AddCommentDto::add($request);
 
-        $comment = CommentsFacade::add($dto);
+        $result = CommentsFacade::add($dto);
 
-        if(!$comment)
-            return $this->error();
-
-        return $this->data($comment);
+        return $this->generateApiResponse();
     }
 
     public function updateComment(UpdateCommentRequest $request): JsonResponse
     {
         $dto = UpdateCommentDto::update($request);
 
-        $comment = CommentsFacade::update($dto);
+        $result = CommentsFacade::update($dto);
 
-        if(!$comment)
-            return $this->error();
-
-        return $this->data($comment);
+        return $this->generateApiResponse();
     }
 
     public function deleteComment(IdRequest $request): JsonResponse
     {
         $dto = IdDto::id($request);
 
-        $action = CommentsFacade::remove($dto);
+        $result = CommentsFacade::remove($dto);
 
-        if(!$action)
-            return $this->error();
-
-        return $this->success(__('responses.deleted', ['resource' => 'comment']));
+        return $this->generateApiResponse();
     }
 
-    public function addReaction(Request $request)
+    public function makeReaction(Request $request): JsonResponse
     {
-        // TODO: add a reaction functionality.
+//        $dto = ;
+//
+//        $result = CommentsFacade::;
+//
+//        return $this->generateApiResponse();
     }
 
-    public function updateReaction(Request $request)
+    public function updateReaction(Request $request): JsonResponse
     {
-        // TODO: update a reaction functionality.
+//        $dto = ;
+//
+//        $result = CommentsFacade::;
+//
+//        return $this->generateApiResponse();
     }
 
-    public function removeReaction(Request $request)
+    public function removeReaction(Request $request): JsonResponse
     {
-        // TODO: remove a reaction functionality.
+//        $dto = ;
+//
+//        $result = CommentsFacade::;
+//
+//        return $this->generateApiResponse();
     }
 }

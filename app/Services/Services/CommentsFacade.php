@@ -6,23 +6,22 @@ use App\Services\Contracts\CommentsContract;
 
 class CommentsFacade implements CommentsContract
 {
-
-    public function addCategory()
+    public function addComment()
     {
-        // TODO: Implement addCategory() method.
+        // TODO: Implement addComment() method.
     }
 
-    public function updateCategory()
+    public function updateComment()
     {
-        // TODO: Implement updateCategory() method.
+        // TODO: Implement updateComment() method.
     }
 
-    public function removeCategory()
+    public function removeComment()
     {
-        // TODO: Implement removeCategory() method.
+        // TODO: Implement removeComment() method.
     }
 
-    public function addReaction()
+    public function makeReaction()
     {
         // TODO: Implement addReaction() method.
     }

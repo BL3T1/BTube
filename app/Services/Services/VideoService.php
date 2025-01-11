@@ -6,19 +6,23 @@ use App\Services\Contracts\VideoContract;
 
 class VideoService implements VideoContract
 {
-
-    public function addVideo()
+    public function addVideo(): string
     {
         // TODO: Implement addVideo() method.
     }
 
-    public function updateVideo()
+    public function updateVideo(): string
     {
         // TODO: Implement updateVideo() method.
     }
 
-    public function removeVideo()
+    public function deleteVideo(): string
     {
-        // TODO: Implement removeVideo() method.
+        // TODO: Implement deleteVideo() method.
+    }
+
+    public function viewVideo()
+    {
+        // TODO: Implement viewVideo() method.
     }
 }

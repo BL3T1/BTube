@@ -9,7 +9,7 @@ class Favorite extends Model
 {
     protected $fillable = [
         'user_id',
-        'number_of_favorites',
+        'video_id',
     ];
 
     public function users(): HasMany

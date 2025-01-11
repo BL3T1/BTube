@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\DTO\Collection\CreateCollectionDto;
-use App\DTO\Collection\DeleteCollectionDto;
 use App\DTO\Collection\UpdateCollectionDto;
 use App\DTO\IdDto;
+use App\DTO\UserDto;
+use App\DTO\Video\AddRemoveVideosDto;
 use App\Http\Requests\Collection\CreateCollectionRequest;
-use App\Http\Requests\Collection\DeleteCollectionRequest;
 use App\Http\Requests\Collection\UpdateCollectionRequest;
 use App\Http\Requests\IdRequest;
+use App\Http\Requests\Video\AddRemoveVideosRequest;
 use App\Services\Facades\CollectionsFacade;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CollectionsController extends Controller
 {
@@ -22,46 +24,63 @@ class CollectionsController extends Controller
     {
         $dto = CreateCollectionDto::create($request);
 
-        $collection = CollectionsFacade::create($dto);
+        $result = CollectionsFacade::create($dto);
 
-        if(!$collection)
-            return $this->error();
-
-        return $this->success(__('responses.created', ['resource' => $collection->name . ' collection']));
+        return $this->generateApiResponse($result, $dto->name, 'collection');
     }
 
     public function updateCollection(UpdateCollectionRequest $request): JsonResponse
     {
         $dto = UpdateCollectionDto::update($request);
 
-        $collection = CollectionsFacade::update($dto);
+        $result = CollectionsFacade::update($dto);
 
-        if(!$collection)
-            return $this->error();
-
-        return $this->success(__('responses.updated', ['resource' => $collection->name . ' collection']));
+        return $this->generateApiResponse($result, $dto->name, 'collection');
     }
 
-    public function deleteCollection(DeleteCollectionRequest $request): JsonResponse
+    public function deleteCollection(IdRequest $request): JsonResponse
     {
-        $dto = DeleteCollectionDto::delete($request);
+        $dto = IdDto::id($request);
 
-        $action = CollectionsFacade::delete($dto);
+        $result = CollectionsFacade::delete($dto);
 
-        if(!$action)
-            return $this->error();
-
-        return $this->success(__('responses.deleted', ['resource' => $action->name . 'collection']));
+        return $this->generateApiResponse($result, $dto->name, 'collection');
     }
 
-    public function addToCollection(): JsonResponse
+    public function showCollectionContent(IdRequest $request): JsonResponse
     {
+        $dto = IdDto::id($request);
 
+        $result = CollectionsFacade::showContent($dto);
+
+        return $this->generateApiResponse();
     }
 
-    public function removeFromCollection(): JsonResponse
+    public function showCollections(Request $request): JsonResponse
     {
+        $dto = UserDto::user($request);
 
+        $result = CollectionsFacade::showAll($dto);
+
+        return $this->generateApiResponse();
+    }
+
+    public function addToCollection(AddRemoveVideosRequest $request): JsonResponse
+    {
+        $dto = AddRemoveVideosDto::AR($request);
+
+        $result = CollectionsFacade::addToCollection($dto);
+
+        return $this->generateApiResponse();
+    }
+
+    public function removeFromCollection(AddRemoveVideosRequest $request): JsonResponse
+    {
+        $dto = AddRemoveVideosDto::AR($request);
+
+        $result = CollectionsFacade::removeFromCollection($dto);
+
+        return $this->generateApiResponse();
     }
 
     /**
@@ -74,12 +93,9 @@ class CollectionsController extends Controller
     {
         $dto = IdDto::id($request);
 
-        $favorite = CollectionsFacade::addToFavorite($dto);
+        $result = CollectionsFacade::addToFavorite($dto);
 
-        if(!$favorite)
-            return $this->error();
-
-        return $this->success(__('responses.custom_success.added', ['resource' => 'video', 'destination' => 'favorite']));
+        return $this->generateApiResponse();
     }
 
     /**
@@ -92,11 +108,17 @@ class CollectionsController extends Controller
     {
         $dto = IdDto::id($request);
 
-        $favorite = CollectionsFacade::removeFromFavorite($dto);
+        $result = CollectionsFacade::removeFromFavorite($dto);
 
-        if(!$favorite)
-            return $this->error();
+        return $this->generateApiResponse();
+    }
 
-        return $this->success(__('responses.custom_success.removed', ['resource' => 'video', 'destination' => 'favorite']));
+    public function showFavorites(Request $request): JsonResponse
+    {
+        $dto = UserDto::user($request);
+
+        $result = CollectionsFacade::showFavorites($dto);
+
+        return $this->generateApiResponse();
     }
 }

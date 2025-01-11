@@ -7,12 +7,12 @@ use App\Http\Requests\Category\UpdateCategoryRequest;
 readonly class UpdateCategoryDto
 {
     /**
-     * @param int $id
+     * @param string $id
      * @param string|null $name
      * @param string|null $description
      */
     public function __construct(
-        public int $id,
+        public string $id,
         public ?string $name,
         public ?string $description,
     )

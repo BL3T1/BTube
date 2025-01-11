@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Collection;
+namespace App\Http\Requests\Video;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCollectionRequest extends FormRequest
+class AddRemoveVideosRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class UpdateCollectionRequest extends FormRequest
     {
         return [
             'id' => 'required|string',
-            'name' => 'required|string'
+            'video_ids' => 'required|array',
+            'video_ids.*' => 'exist:videos:id',
         ];
     }
 }

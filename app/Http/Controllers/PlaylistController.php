@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\DTO\IdDto;
 use App\DTO\Playlist\CreatePlaylistDto;
 use App\DTO\Playlist\UpdatePlaylistDto;
+use App\DTO\UserDto;
 use App\Http\Requests\IdRequest;
 use App\Http\Requests\Playlist\CreatePlaylistRequest;
 use App\Http\Requests\Playlist\UpdatePlaylistRequest;
 use App\Services\Facades\PlaylistFacade;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Psy\Util\Json;
 
 class PlaylistController extends Controller
@@ -21,57 +23,44 @@ class PlaylistController extends Controller
     {
         $dto = CreatePlaylistDto::create($request);
 
-        $playlist = PlaylistFacade::create($dto);
+        $result = PlaylistFacade::create($dto);
 
-        if(!$playlist)
-            return $this->error();
-
-        return $this->data($playlist);
+        return $this->generateApiResponse();
     }
 
     public function updatePlaylist(UpdatePlaylistRequest $request): JsonResponse
     {
         $dto = UpdatePlaylistDto::update($request);
 
-        $playlist = PlaylistFacade::update($dto);
+        $result = PlaylistFacade::update($dto);
 
-        if(!$playlist)
-            return $this->error();
-
-        return $this->data($playlist);
+        return $this->generateApiResponse();
     }
 
     public function deletePlaylist(IdRequest $request): JsonResponse
     {
         $dto = IdDto::id($request);
 
-        $action = PlaylistFacade::delete($dto);
+        $result = PlaylistFacade::delete($dto);
 
-        if(!$action)
-            return $this->error();
-
-        return $this->success(__('responses.deleted', ['resource' => 'playlist']));
+        return $this->generateApiResponse();
     }
 
     public function showPlaylistContent(IdRequest $request): JsonResponse
     {
         $dto = IdDto::id($request);
 
-        $playlist = PlaylistFacade::showContent($dto);
+        $result = PlaylistFacade::showContent($dto);
 
-        if(!$playlist)
-            return $this->error();
-
-        return $this->data($playlist);
+        return $this->generateApiResponse();
     }
 
-    public function showAllPlaylists(): JsonResponse
+    public function showCreatorPlaylists(Request $request): JsonResponse
     {
-        $playlists = PlaylistFacade::showAll();
+        $dto = UserDto::user($request);
 
-        if(!$playlists)
-            return $this->error();
+        $result = PlaylistFacade::showCreatorPlaylist($dto);
 
-        return $this->data($playlists);
+        return $this->generateApiResponse();
     }
 }

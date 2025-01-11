@@ -9,13 +9,13 @@ readonly class UpdateCollectionDto
 {
     /**
      * @param User $user
-     * @param string $oldName
-     * @param string|null $newName
+     * @param string $id
+     * @param string|null $name
      */
     public function __construct(
         public User $user,
-        public string $oldName,
-        public ?string $newName,
+        public string $id,
+        public ?string $name,
     )
     {
     }
@@ -28,8 +28,8 @@ readonly class UpdateCollectionDto
     {
         return new self(
             user: $request->user(),
-            oldName: $request->old_name,
-            newName: $request->new_name,
+            id: $request->id,
+            name: $request->name,
         );
     }
 }

@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('favorites', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('number_of_favorites')->default(0);
+            $table->unsignedInteger('video_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('video_id')->references('id')->on('videos')->cascadeOnDelete();
             $table->timestamps();
         });
     }

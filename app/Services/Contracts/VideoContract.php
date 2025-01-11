@@ -4,9 +4,11 @@ namespace App\Services\Contracts;
 
 interface VideoContract
 {
-    public function addVideo();
+    public function addVideo(): string;
 
-    public function updateVideo();
+    public function updateVideo(): string;
 
-    public function removeVideo();
+    public function deleteVideo(): string;
+
+    public function viewVideo();
 }

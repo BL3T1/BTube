@@ -9,6 +9,7 @@ readonly class UpdatePlaylistDto
 {
     public function __construct(
         public User $user,
+        public string $id,
         public string $name,
     )
     {
@@ -18,6 +19,7 @@ readonly class UpdatePlaylistDto
     {
         return new self(
             user: $request->user,
+            id: $request->id,
             name: $request->name
         );
     }

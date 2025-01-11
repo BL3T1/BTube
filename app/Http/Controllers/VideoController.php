@@ -20,7 +20,7 @@ class VideoController extends Controller
         // TODO: update a video functionality.
     }
 
-    public function removeVideo(Request $request): JsonResponse
+    public function deleteVideo(Request $request): JsonResponse
     {
         // TODO: remove a video functionality.
     }

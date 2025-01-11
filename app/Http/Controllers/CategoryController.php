@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\DTO\Category\CreateCategoryDto;
-use App\DTO\Category\DeleteCategoryDto;
 use App\DTO\Category\UpdateCategoryDto;
 use App\DTO\IdDto;
+use App\DTO\Video\AddRemoveVideosDto;
 use App\Http\Requests\Category\CreateCategoryRequest;
-use App\Http\Requests\Category\DeleteCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Requests\IdRequest;
+use App\Http\Requests\Video\AddRemoveVideosRequest;
 use App\Models\Category;
 use App\Services\Facades\CategoryFacade;
 use App\Traits\ApiResponseTrait;
+use Illuminate\Config\Repository;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Psy\Util\Json;
@@ -32,12 +34,9 @@ class CategoryController extends Controller
         {
             $dto = CreateCategoryDto::create($request);
 
-            $state = CategoryFacade::create($dto);
+            $result = CategoryFacade::create($dto);
 
-            if($state == 'already_exist')
-                return $this->error(__("responses.{$state}", ['resource' => $dto->name]), 400);
-
-            return $this->success(__("responses.{$state}", ['resource' => $dto->name]), 200);
+            return $this->generateApiResponse($result, $dto->name, ' category');
         }
 
     /**
@@ -50,30 +49,24 @@ class CategoryController extends Controller
     {
         $dto = UpdateCategoryDto::update($request);
 
-        $category = CategoryFacade::update($dto);
+        $result = CategoryFacade::update($dto);
 
-        if(!$category)
-            return $this->error();
-
-        return $this->success(__('responses.updated', ['resource' => $dto->name]), 200);
+        return $this->generateApiResponse($result, $dto->name, ' category');
     }
 
     /**
      * Delete a category.
      *
-     * @param DeleteCategoryRequest $request
+     * @param IdRequest $request
      * @return JsonResponse
      */
-    public function deleteCategory(DeleteCategoryRequest $request): JsonResponse
+    public function deleteCategory(IdRequest $request): JsonResponse
     {
-        $dto = DeleteCategoryDto::delete($request);
+        $dto = IdDto::id($request);
 
-        $category = CategoryFacade::delete($dto);
+        $result = CategoryFacade::delete($dto);
 
-        if($category == null)
-            return $this->error();
-
-        return $this->success(__('responses.deleted', ['resource' => $dto->name]), 200);
+        return $this->generateApiResponse($result, $dto->name, ' category');
     }
 
     /**
@@ -86,12 +79,9 @@ class CategoryController extends Controller
     {
         $dto = IdDto::id($request);
 
-        $category = CategoryFacade::showContent($dto);
+        $result = CategoryFacade::showContent($dto);
 
-        if($category == null)
-            return $this->error(__('responses.not_found'), 404);
-
-        return $this->data($category);
+        return $this->generateApiResponse($result[0], null, 'category', $result[1]);
     }
 
     /**
@@ -101,11 +91,26 @@ class CategoryController extends Controller
      */
     public function showCategories(): JsonResponse
     {
-        $categories = CategoryFacade::showAll();
+        $result = CategoryFacade::showAll();
 
-        if(!$categories)
-            return $this->error();
+        return $this->generateApiResponse($result[0], null, null, $result[1]);
+    }
 
-        return $this->data($categories);
+    public function addToCategory(AddRemoveVideosRequest $request): JsonResponse
+    {
+        $dto = AddRemoveVideosDto::AR($request);
+
+        $result = CategoryFacade::addToCategory($dto);
+
+        return $this->generateApiResponse();
+    }
+
+    public function removeFromCategory(AddRemoveVideosRequest $request): JsonResponse
+    {
+        $dto = AddRemoveVideosDto::AR($request);
+
+        $result = CategoryFacade::removeFromCategory($dto);
+
+        return $this->generateApiResponse();
     }
 }
